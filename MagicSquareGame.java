@@ -42,8 +42,8 @@ public class MagicSquareGame {
         //create the Magic Square
     
         SquareMatrix matrix = new SquareMatrix(size);
-        //keep a copy
-        SquareMatrix originalMatrix = matrix;
+        //make a reference copy
+        SquareMatrix originalMatrix = new SquareMatrix(size);
         //now scramble
         matrix.shuffle();
         System.out.println("Here is your Shuffled Square");
@@ -57,7 +57,7 @@ public class MagicSquareGame {
         System.out.println("Enter A to see solution and quit the program");
         System.out.println("______________________________");
         
-        int x, y;
+        int row1 = 1, col1 = 1; //set default values
         String direction;
         
         scanner = new Scanner(System.in); //clears old scanner
@@ -85,9 +85,9 @@ public class MagicSquareGame {
             String[] parts = s.split(",");
             
             try {
-                x = Integer.parseInt(parts[0]);
-                y = Integer.parseInt(parts[1]);
-                if(x > size || y > size) {
+                row1 = Integer.parseInt(parts[0]);
+                col1 = Integer.parseInt(parts[1]);
+                if(row1 > size || col1 > size) {
                    System.out.println("Your row or column values is greater than " + size);
                    System.out.println("INVALID MOVE!");
                    continue;
@@ -98,7 +98,28 @@ public class MagicSquareGame {
                  System.exit(0);
             }
             
-            System.out.println("we are now ready to make the move");
+            direction = parts[2].toUpperCase();
+            int row2 = row1; //for the desitnation position of the move ie x2,y2
+            int col2 = col1; 
+            switch(direction) {
+                case("U"):
+                    row2 = matrix.dec(row1);
+                    break;
+                case("D"):
+                    row2 = matrix.inc(row1);
+                    break;
+                case("L"):
+                    col2 = matrix.dec(col1);
+                    break;
+                case("R"):
+                    col2 = matrix.inc(col1);
+                    break;
+            }
+            
+            System.out.println("You said swap:row" + row1 + ",col" + col1 + " with row" + row2 + ",col" + col2);
+            matrix.swap(new int[]{0,row1,col1},new int[]{0,row2,col2});
+            matrix.display();
+            System.out.println("__________________________________________");
      
         }
         
